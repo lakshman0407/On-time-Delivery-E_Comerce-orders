@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 # Load the trained model
-model = pickle.load(open("model.pkl", "rb"))
+model = pickle.load(open(On-Time Delivery of E-Commerce Orders.pkl", "rb"))
 
 st.title("E-Commerce Delivery Prediction")
 st.write("Predict whether the shipment will reach on time.")
