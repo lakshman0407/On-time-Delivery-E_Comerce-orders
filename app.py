@@ -79,5 +79,5 @@ st.markdown("""
 # Add footer or credits
 st.markdown("""
     ---
-    Developed with ❤️ by [Your Name](https://your-profile-link) for E-Commerce Delivery Prediction.
+    Developed with ❤️ by [Lakshman] for E-Commerce Delivery Prediction.
 """)
