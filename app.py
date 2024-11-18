@@ -20,19 +20,25 @@ discount_offered = st.number_input("Discount Offered", min_value=0)
 weight = st.number_input("Weight in grams", min_value=0)
 
 # Encoding the shipment_mode input
-shipment_mode_encoded = label_encoder.fit_transform([shipment_mode])[0]
+# This assumes that 'shipment_mode' is a categorical variable, so we use LabelEncoder.
+shipment_mode_encoded = label_encoder.fit_transform(["Flight", "Ship", "Road"])  # Encode all values at once
+shipment_mode_value = label_encoder.transform([shipment_mode])[0]  # Transform the selected input
 
-# Preprocessing input
+# Preprocessing input (make sure to match the same order as used during training)
 input_data = np.array([
-    shipment_mode_encoded, customer_care_calls, cost_of_product, 
+    shipment_mode_value, customer_care_calls, cost_of_product, 
     discount_offered, weight
 ]).reshape(1, -1)
 
 # Prediction
 if st.button("Predict"):
     try:
-        prediction = model.predict(input_data)
-        result = "On Time" if prediction[0] == 1 else "Not On Time"
-        st.write(f"The shipment is predicted to be: {result}")
+        # Ensure that the model's predict method is available and that input shape is correct
+        if hasattr(model, 'predict'):
+            prediction = model.predict(input_data)
+            result = "On Time" if prediction[0] == 1 else "Not On Time"
+            st.write(f"The shipment is predicted to be: {result}")
+        else:
+            st.error("Model does not have a 'predict' method.")
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
