@@ -5,18 +5,34 @@ import numpy as np
 # Load the trained model
 model = pickle.load(open("ecommerce_model.pkl", "rb"))
 
-st.title("E-Commerce Delivery Prediction")
-st.write("Predict whether the shipment will reach on time based on user inputs.")
+# Set page config for a better layout
+st.set_page_config(page_title="E-Commerce Delivery Prediction", page_icon="📦", layout="wide")
 
-# User Inputs
-shipment_mode = st.selectbox("Mode of Shipment", ["Flight", "Ship", "Road"])
-customer_care_calls = st.slider("Customer Care Calls", 0, 10, 4)
-cost_of_product = st.number_input("Cost of the Product", min_value=0)
-discount_offered = st.number_input("Discount Offered", min_value=0)
-weight = st.number_input("Weight in grams", min_value=0)
+# Title and description
+st.title("E-Commerce Delivery Prediction 📦")
+st.write("""
+    **Welcome to the E-Commerce Delivery Prediction App!**
+    This app predicts whether an e-commerce shipment will arrive on time based on various factors like shipment mode, product cost, customer care calls, and more.
+""")
 
-# Additional features (use default values or collect more inputs if needed)
-product_importance = st.selectbox("Product Importance", ["Low", "Medium", "High"])
+# Sidebar for navigation and inputs
+st.sidebar.header("Input Features")
+st.sidebar.write("Provide the following details about the shipment:")
+
+# Use columns to organize input fields neatly
+col1, col2 = st.columns(2)
+
+with col1:
+    shipment_mode = st.selectbox("Mode of Shipment", ["Flight", "Ship", "Road"])
+    customer_care_calls = st.slider("Customer Care Calls", 0, 10, 4)
+    cost_of_product = st.number_input("Cost of the Product", min_value=0)
+
+with col2:
+    discount_offered = st.number_input("Discount Offered", min_value=0)
+    weight = st.number_input("Weight in grams", min_value=0)
+    product_importance = st.selectbox("Product Importance", ["Low", "Medium", "High"])
+
+# Additional features (using default values or placeholders)
 gender = st.selectbox("Gender of Customer", ["Male", "Female"])
 
 # Encoding categorical features
@@ -41,11 +57,27 @@ input_data = np.array([
     0   # Replace with actual value for 'Feature_11'
 ]).reshape(1, -1)
 
-# Prediction
-if st.button("Predict"):
+# Prediction button with styled text
+if st.button("Predict", use_container_width=True):
     try:
         prediction = model.predict(input_data)
         result = "On Time" if prediction[0] == 1 else "Not On Time"
-        st.success(f"The shipment is predicted to be: {result}")
+        st.markdown(f"### 🚚 **Prediction Result**: The shipment is predicted to be: **{result}**")
     except Exception as e:
         st.error(f"Error during prediction: {str(e)}")
+
+# Add some explanatory text or additional styling
+st.markdown("""
+    ---
+    **Note:** The model considers multiple factors, including customer care calls, cost, shipment mode, and product importance.
+    Please ensure all the data you input is correct for better prediction results.
+""")
+
+# Optional: Add an image or a visualization (e.g., for delivery times, etc.)
+# st.image("image_path_or_url.png", caption="Sample Image")
+
+# Add footer or credits
+st.markdown("""
+    ---
+    Developed with ❤️ by [Your Name](https://your-profile-link) for E-Commerce Delivery Prediction.
+""")
