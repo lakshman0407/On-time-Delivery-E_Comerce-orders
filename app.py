@@ -1,9 +1,13 @@
 import streamlit as st
 import pickle
 import numpy as np
+from sklearn.preprocessing import LabelEncoder
 
 # Load the trained model
 model = pickle.load(open("On-Time Delivery of E-Commerce Orders.pkl", "rb"))
+
+# Initialize the LabelEncoder
+label_encoder = LabelEncoder()
 
 st.title("E-Commerce Delivery Prediction")
 st.write("Predict whether the shipment will reach on time.")
@@ -15,9 +19,12 @@ cost_of_product = st.number_input("Cost of the Product", min_value=0)
 discount_offered = st.number_input("Discount Offered", min_value=0)
 weight = st.number_input("Weight in grams", min_value=0)
 
+# Encoding the shipment_mode input
+shipment_mode_encoded = label_encoder.fit_transform([shipment_mode])[0]
+
 # Preprocessing input
 input_data = np.array([
-    shipment_mode, customer_care_calls, cost_of_product, 
+    shipment_mode_encoded, customer_care_calls, cost_of_product, 
     discount_offered, weight
 ]).reshape(1, -1)
 
